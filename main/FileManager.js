@@ -4,7 +4,12 @@ async function genFSTree(rootPath) {
   let fileEnts = await fs.promises.readdir(rootPath, { withFileTypes: true });
   let dirNames = fileEnts.filter(fileEnt => fileEnt.isDirectory()).map(fileEnt => fileEnt.name);
   dirNames.forEach(dir => {
-    let li = $("<li class=\"nav-item\"><a class=\"nav-link text-truncate\" href=\"#\" onclick=fm.getFolderContent(\"" + "/" + dir + "\")><i class=\"fa fa-folder\"></i> <span class=\"d-none d-sm-inline\">" + "/"+dir + "</span></a></li>");
+    let li = $("<li class=\"nav-item\"><a class=\"nav-link text-truncate\" href=\"#\" onclick=fm.getFolderContent(\"" + "/" + dir + "\")><i class=\"fa fa-folder fa-lg\"></i> <span class=\"d-none d-sm-inline\">" + "/"+dir + "</span></a></li>");
+    $("li.nav-item a").hover(function() {
+      $(this).addClass("active");
+    }, function() {
+      $(this).removeClass("active");
+    })
     $("ul.root").append(li);
   });
 }
@@ -24,9 +29,11 @@ async function getFolderContent(folderName) {
         $("div.fm").empty();
         for (let index = 0; index < files.length; index++) {
           fs.promises.stat(folderName + "/" + files[index]).then((stats) => {
-            var fileSizeInBytes = stats["size"];
-            var lastModified = stats["mtime"];
-            let content = $("<tr><th scope=\"row\"><i class=\"fa fa-folder\"></i></th><td>" + files[index] + "</td><td>" + (fileSizeInBytes / 1024).toFixed(2) + " KB</td><td>" + lastModified + "</td></tr>");
+            let fileSizeInBytes = stats["size"];
+            let lastModified = stats["mtime"];
+            let icon = stats.isDirectory() ? "fa-folder" : "fa-file";
+            let content = $("<tr><th scope=\"row\"><i class=\"fa fa-lg " + icon+ "\"></i></th><td><a onclick=fm.getFolderContent(\"" + folderName + "/" + files[index] + "\") href=\"#\">" + files[index] + "</a></td><td>" + (fileSizeInBytes / 1024).toFixed(2) + " KB</td><td>" + lastModified + "</td></tr>");
+            
             body.append(content);
           });
           $("div.fm").append(divOuter);
