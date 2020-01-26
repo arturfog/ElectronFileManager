@@ -1,0 +1,7 @@
+function detectNew() {
+
+}
+
+function format() {
+
+}
