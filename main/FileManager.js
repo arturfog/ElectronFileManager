@@ -39,11 +39,19 @@ function convertPermissions(perm) {
 }
 
 function goUp() {
-  CWD.pop();
+  if(CWD.length > 1) {
+    CWD.pop();
+  }
+  getFolderContent(getCurrentPath());
 }
 
 function goHome() {
   CWD = ["/", "home"];
+  getFolderContent(getCurrentPath());
+}
+
+function getCurrentPath() {
+  return CWD.join("/");
 }
 
 async function getFolderContent(folderName) {
@@ -62,7 +70,7 @@ async function getFolderContent(folderName) {
             let perm = stats["mode"];
             let uid = stats["uid"];
             let icon = stats.isDirectory() ? "fa-folder" : "fa-file";
-            let content = $("<tr><th scope=\"row\"><i class=\"fa fa-lg " + icon+ "\"></i></th><td><a onclick=fm.getFolderContent(\"" + folderName + "/" + files[index] + "\") href=\"#\">" + files[index] + "</a></td><td>" + (fileSizeInBytes / 1024).toFixed(2) + " KB</td><td>" + perm + "</td><td>" + uid + "</td></tr>");
+            let content = $("<tr><th scope=\"row\"><i class=\"fa fa-lg " + icon+ "\"></i></th><td class=\"bla\"><a onclick=fm.handleClick(\"" + folderName + "/" + files[index] + "\") href=\"#\">" + files[index] + "</a></td><td>" + (fileSizeInBytes / 1024).toFixed(2) + " KB</td><td>" + perm + "</td><td>" + uid + "</td></tr>");
             
             body.append(content);
           });
@@ -73,3 +81,7 @@ async function getFolderContent(folderName) {
 
 exports.getFolderContent = getFolderContent;
 exports.genFSTree = genFSTree;
+exports.handleClick = handleClick;
+exports.goHome = goHome;
+exports.goUp = goUp;
+exports.getCurrentPath = getCurrentPath;

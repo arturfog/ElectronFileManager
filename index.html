@@ -47,10 +47,10 @@
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#"><i class="fa fa-home fa-lg" onclick=fm.getFolderContent("/home")></i> </a>
+          <a class="nav-link" href="#"><i class="fa fa-home fa-lg" onclick=fm.goHome()></i> </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="fa fa-arrow-circle-up fa-lg"></i> </a>
+          <a class="nav-link" href="#"><i class="fa fa-arrow-circle-up fa-lg" onclick=fm.goUp()></i> </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="fa fa-undo fa-lg"></i> </a>
@@ -106,11 +106,6 @@
           <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h6 class="border-bottom border-gray pb-2 mb-0">Fielsystem</h6>
             <ul class="nav flex-column root nav-pills">
-
-              <script>
-                fm.genFSTree("/");
-              </script>
-
               <li class="nav-item"><a class="nav-link text-truncate" href="#"><i class="fa fa-bar-chart"></i> <span class="d-none d-sm-inline">Trash</span></a></li>
               <li class="nav-item"><a class="nav-link text-truncate" href="#"><i class="fa fa-user"></i> <span class="d-none d-sm-inline">Shared</span></a></li>
               <li class="nav-item"><a class="nav-link text-truncate" href="#"><i class="fa fa-star"></i> <span class="d-none d-sm-inline">Starred</span></a></li>
@@ -148,22 +143,21 @@
             </ul>
           </div>
         </div>
+        <!-- -->
         <div class="col-6">
-
+          <div class="dropdown-menu dropdown-menu-sm" id="context-menu">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
           <div class="my-3 p-3 bg-white rounded shadow-sm fm">
-            
             <div class="media text-muted pt-3">
               <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray" id="files">
               </div>
             </div>
-            
-            <script>
-              fm.getFolderContent("/tmp")
-            </script>
           </div>
         </div>
-
-
+        <!-- -->
         <div class="col-3">
           <div class="my-3 p-3 bg-white rounded shadow-sm">
             <h6 class="border-bottom border-gray pb-2 mb-0">Recent updates</h6>
@@ -182,12 +176,33 @@
             </div>
           </div>
         </div>
-
-
+        <!-- -->
       </div>
   </main>
-  <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
+  <script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script>
+$('.bla').on('contextmenu', function(e) {
+  console.log("rc");
+  var top = e.pageY - 10;
+  var left = e.pageX - 90;
+  $("#context-menu").css({
+    display: "block",
+    top: top,
+    left: left
+  }).addClass("show");
+  return false; //blocks default Webbrowser right click menu
+}).click(function() {
+  $("#context-menu").removeClass("show").hide();
+});
+  
+$("#context-menu a").on("click", function() {
+  $(this).parent().removeClass("show").hide();
+});
+
+    fm.genFSTree("/");
+    fm.getFolderContent(fm.getCurrentPath());
+  </script>
 
 </body>
 
