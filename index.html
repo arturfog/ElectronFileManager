@@ -83,7 +83,7 @@
   <main class="container-fluid">
       <div class="row">
         <div class="col-2">
-          <div class="my-3 p-3 bg-white rounded shadow-sm">
+          <div class="my-3 p-3 bg-white rounded shadow-sm overflow-auto">
             <h6 class="border-bottom border-gray pb-2 mb-0">Fielsystem</h6>
             <ul class="nav flex-column root nav-pills">
               <li class="nav-item"><a class="nav-link text-truncate" href="#"><i class="fa fa-bar-chart"></i> <span class="d-none d-sm-inline">Trash</span></a></li>
@@ -124,8 +124,8 @@
           </div>
         </div>
         <!-- -->
-        <div class="col-6">
-          <div class="my-3 p-3 bg-white rounded shadow-sm fm">
+        <div class="col-7">
+          <div class="my-3 p-3 bg-white rounded shadow-sm fm overflow-auto">
             <div class="media text-muted pt-3">
               <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray" id="files">
               </div>
@@ -163,7 +163,22 @@
     fm.genFSTree("/");
     fm.getFolderContent(fm.getCurrentPath());
   </script>
-  <script>
+
+<script>
+  function setMaxHeight() {
+    let divHeight = $(window).height()*80/100; 
+    $(".overflow-auto").css("max-height", divHeight);
+  }
+$(function(){
+  setMaxHeight();
+  $(window).resize(function()
+  {
+    setMaxHeight();
+  });
+});
+</script>
+
+<script>
   const { remote } = require('electron')
   const { Menu, MenuItem } = remote
   
