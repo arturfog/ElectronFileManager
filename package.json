@@ -4,12 +4,46 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "electron": "^7.1.9"
+    "electron": "^7.1.9",
+    "mmmagic": "^0.5.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron-builder": "^22.3.2",
+    "electron-rebuild": "^1.10.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "build": {
+    "appId": "yourappid",
+    "category": "your.app.category.type",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel",
+      "icon": "build/icon.ico"
+    }
   },
   "author": "Artur",
   "license": "GPL-3.0-or-later"

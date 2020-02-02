@@ -24,8 +24,40 @@ function handleClick(itemPath) {
   }
 }
 
+function getItemType(itemPath) {
+  let Magic = require('mmmagic').Magic;
+
+  let magic = new Magic();
+  magic.detectFile(itemPath, function(err, result) {
+    if (err) throw err;
+    $("#info_type").text(result);
+  });
+}
+
+function openPDF(filePath){
+  let pdfWindow = new electron.remote.BrowserWindow({
+      icon: './build/icon.png',
+      width: 1200,
+      height: 800,
+      webPreferences: {
+          plugins: true
+      }
+  });
+
+  pdfWindow.loadURL(url.format({
+      pathname: filePath,
+      protocol: 'file:',
+      slashes: true
+  }));
+
+  pdfWindow.setMenu(null);
+
+  pdfWindow.on("closed", function () {
+      pdfWindow = null
+  });
+}
+
 function getItemInfo(itemPath) {
-  
   fs.promises.stat(itemPath).then((stats) => {
     console.log("ip:" + itemPath)
     let fileSizeInBytes = stats["size"];
@@ -34,6 +66,7 @@ function getItemInfo(itemPath) {
     let perm = stats["mode"];
     let uid = stats["uid"];
     let group = stats["gid"];
+    getItemType(itemPath);
 
     $("#info_name").text(itemPath.split("/").pop());
     $("#info_mtime").text(lastModified);
@@ -69,12 +102,6 @@ function convertUid(uid) {
     return "root"
   }
   return "artur";
-}
-
-function getFileType(bytes) {
-  if(bytes == 0x504B) {
-    return "ZIP archive"
-  }
 }
 
 function convertSize(size) {
