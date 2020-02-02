@@ -76,6 +76,15 @@ function getItemInfo(itemPath) {
     $("#info_owner").text(convertUid(uid));
     $("#info_group").text(convertGid(group));
     $("#info_perm").text(convertPermissions(perm));
+
+    $("#preview").empty();
+    if(itemPath.includes(".mp4")) {
+      $("#preview").append("<video id=\"my-video\" class=\"video-js\" controls preload=\"auto\" width=\"320\" height=\"288\" data-setup=\"{}\"></video>");
+      $("#my-video").append("<source src=\"file://" + itemPath + "\" type=\"video/mp4\" />");
+    }
+    if(itemPath.includes(".png")) {
+      $("#preview").append("<img src=\"file://" + itemPath + "\"/>");
+    }
   });
 }
 
